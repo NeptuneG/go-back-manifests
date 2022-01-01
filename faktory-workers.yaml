@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: faktory-workers
+  labels:
+    app: faktory-workers
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: faktory-workers
+  template:
+    metadata:
+      labels:
+        app: faktory-workers
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: faktory-workers
+        image: docker.io/neptuneg/faktory-workers:latest
+        env:
+        - name: TZ
+          value: "Asia/Tokyo"
+        - name: FAKTORY_PROVIDER
+          value: "FAKTORY_URL"
+        - name: FAKTORY_URL
+          value: "http://faktory.default.svc.cluster.local:7419"
+        resources:
+          limits:
+            memory: 128Mi
+            cpu: "0.3"
+          requests:
+            memory: 64Mi
+            cpu: "0.1"

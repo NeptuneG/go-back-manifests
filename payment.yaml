@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment
+  labels:
+    app: payment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment
+  template:
+    metadata:
+      labels:
+        app: payment
+    spec:
+      containers:
+      - name: payment
+        image: docker.io/neptuneg/payment-service:latest
+        env:
+        - name: GRPC_GO_RETRY
+          value: "on"
+        ports:
+        - containerPort: 3377
+        resources:
+          limits:
+            memory: 128Mi
+            cpu: "0.3"
+          requests:
+            memory: 64Mi
+            cpu: "0.1"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment
+spec:
+  type: ClusterIP
+  selector:
+    app: payment
+  ports:
+    - protocol: TCP
+      port: 3377
+      targetPort: 3377

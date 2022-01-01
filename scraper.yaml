@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scraper
+  labels:
+    app: scraper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scraper
+  template:
+    metadata:
+      labels:
+        app: scraper
+    spec:
+      containers:
+      - name: scraper
+        image: docker.io/neptuneg/scraper-service:latest
+        env:
+        - name: FAKTORY_PROVIDER
+          value: "FAKTORY_URL"
+        - name: FAKTORY_URL
+          value: "http://faktory.default.svc.cluster.local:7419"
+        ports:
+        - containerPort: 3377
+        resources:
+          limits:
+            memory: 128Mi
+            cpu: "0.3"
+          requests:
+            memory: 64Mi
+            cpu: "0.1"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scraper
+spec:
+  type: ClusterIP
+  selector:
+    app: scraper
+  ports:
+    - protocol: TCP
+      port: 3377
+      targetPort: 3377
