@@ -4,6 +4,7 @@ metadata:
   name: user
   labels:
     app: user
+  namespace: app
 spec:
   replicas: 1
   selector:
@@ -17,6 +18,21 @@ spec:
       containers:
       - name: user
         image: docker.io/neptuneg/user-service:latest
+        env:
+          - name: DB_HOST
+            value: db.db.svc.cluster.local
+          - name: DB_NAME
+            value: user_development
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: psql
+                key: username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: psql
+                key: password
         ports:
         - containerPort: 3377
         resources:
@@ -32,6 +48,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: user
+  namespace: app
 spec:
   type: ClusterIP
   selector:

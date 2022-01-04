@@ -4,6 +4,7 @@ metadata:
   name: db
   labels:
     app: db
+  namespace: db
 spec:
   replicas: 1
   selector:
@@ -13,6 +14,7 @@ spec:
     metadata:
       labels:
         app: db
+      namespace: db
     spec:
       containers:
       - name: db
@@ -23,9 +25,19 @@ spec:
         - name: TZ
           value: "Asia/Tokyo"
         - name: POSTGRES_USER
-          value: "dev"
+          valueFrom:
+            secretKeyRef:
+              name: psql
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: psql
+              key: password
         - name: POSTGRES_HOST_AUTH_METHOD
-          value: "trust"
+          value: trust
+        - name: PG_DATA
+          value: /var/lib/pg_data
         resources:
           limits:
             memory: 512Mi
@@ -33,12 +45,33 @@ spec:
           requests:
             memory: 128Mi
             cpu: "0.1"
+        volumeMounts:
+        - name: db-data
+          mountPath: /var/lib/pg_data
+      volumes:
+      - name: db-data
+        persistentVolumeClaim:
+          claimName: db-data
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-data
+  namespace: db
+spec:
+  resources:
+    requests:
+      storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: db
+  namespace: db
 spec:
   type: ClusterIP
   selector:

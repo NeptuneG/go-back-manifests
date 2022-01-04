@@ -4,6 +4,7 @@ metadata:
   name: payment
   labels:
     app: payment
+  namespace: app
 spec:
   replicas: 1
   selector:
@@ -18,8 +19,22 @@ spec:
       - name: payment
         image: docker.io/neptuneg/payment-service:latest
         env:
-        - name: GRPC_GO_RETRY
-          value: "on"
+          - name: DB_HOST
+            value: db.db.svc.cluster.local
+          - name: DB_NAME
+            value: payment_development
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: psql
+                key: username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: psql
+                key: password
+          - name: GRPC_GO_RETRY
+            value: 'on'
         ports:
         - containerPort: 3377
         resources:
@@ -35,6 +50,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: payment
+  namespace: app
 spec:
   type: ClusterIP
   selector:
