@@ -45,26 +45,6 @@ spec:
           requests:
             memory: 128Mi
             cpu: "0.1"
-        volumeMounts:
-        - name: db-data
-          mountPath: /var/lib/pg_data
-      volumes:
-      - name: db-data
-        persistentVolumeClaim:
-          claimName: db-data
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: db-data
-  namespace: db
-spec:
-  resources:
-    requests:
-      storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
 
 ---
 apiVersion: v1
