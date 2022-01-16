@@ -32,7 +32,7 @@ spec:
         - name: FAKTORY_PROVIDER
           value: "FAKTORY_URL"
         - name: FAKTORY_URL
-          value: "http://faktory.default.svc.cluster.local:7419"
+          value: "http://faktory.app.svc.cluster.local:7419"
         resources:
           limits:
             memory: 128Mi

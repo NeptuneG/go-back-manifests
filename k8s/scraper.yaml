@@ -22,15 +22,15 @@ spec:
         - name: FAKTORY_PROVIDER
           value: "FAKTORY_URL"
         - name: FAKTORY_URL
-          value: "http://faktory.default.svc.cluster.local:7419"
+          value: "http://faktory.app.svc.cluster.local:7419"
         ports:
         - containerPort: 3377
         resources:
           limits:
-            memory: 128Mi
+            memory: 32Mi
             cpu: "0.3"
           requests:
-            memory: 64Mi
+            memory: 16Mi
             cpu: "0.1"
 
 ---

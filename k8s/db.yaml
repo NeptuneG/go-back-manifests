@@ -45,6 +45,44 @@ spec:
           requests:
             memory: 128Mi
             cpu: "0.1"
+        volumeMounts:
+        - name: initdb
+          mountPath: /docker-entrypoint-initdb.d
+        - name: db-data
+          mountPath: /var/lib/pg_data
+      volumes:
+      - name: db-data
+        persistentVolumeClaim:
+          claimName: db-data
+      - name: initdb
+        configMap:
+          name: initdb
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: initdb
+  labels:
+    app: db
+  namespace: db
+data:
+  initdb.sh: |
+    psql -U $POSTGRES_USER -tc "SELECT 1 FROM pg_database WHERE datname = 'live_development'" | grep -q 1 || psql -U $POSTGRES_USER -c "CREATE DATABASE live_development"
+    psql -U $POSTGRES_USER -tc "SELECT 1 FROM pg_database WHERE datname = 'payment_development'" | grep -q 1 || psql -U $POSTGRES_USER  -c "CREATE DATABASE payment_development"
+    psql -U $POSTGRES_USER -tc "SELECT 1 FROM pg_database WHERE datname = 'auth_development'" | grep -q 1 || psql -U $POSTGRES_USER  -c "CREATE DATABASE auth_development"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-data
+  namespace: db
+spec:
+  storageClassName: hostpath
+  resources:
+    requests:
+      storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
 
 ---
 apiVersion: v1
