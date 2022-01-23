@@ -4,23 +4,27 @@ metadata:
   name: payment
   labels:
     app: payment
+    version: v1
   namespace: app
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: payment
+      version: v1
   template:
     metadata:
       labels:
         app: payment
+        version: v1
     spec:
       containers:
       - name: payment
         image: docker.io/neptuneg/payment-service:latest
+        envFrom:
+        - configMapRef:
+            name: app-config
         env:
-          - name: DB_HOST
-            value: db.db.svc.cluster.local
           - name: DB_NAME
             value: payment_development
           - name: DB_USER
@@ -37,6 +41,14 @@ spec:
             value: 'on'
         ports:
         - containerPort: 3377
+          protocol: TCP
+          name: grpc
+        readinessProbe:
+          exec:
+            command: [ "/app/grpc-health-probe", "-addr=:3377" ]
+        livenessProbe:
+          exec:
+            command: [ "/app/grpc-health-probe", "-addr=:3377" ]
         resources:
           limits:
             memory: 32Mi
@@ -57,5 +69,7 @@ spec:
     app: payment
   ports:
     - protocol: TCP
+      appProtocol: grpc
+      name: grpc
       port: 3377
       targetPort: 3377
