@@ -4,23 +4,30 @@ metadata:
   name: faktory
   labels:
     app: faktory
+    version: v1
   namespace: app
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: faktory
+      version: v1
   template:
     metadata:
       labels:
         app: faktory
+        version: v1
     spec:
       containers:
       - name: faktory
         image: contribsys/faktory:latest
         ports:
         - containerPort: 7419
+          protocol: TCP
+          name: http
         - containerPort: 7420
+          protocol: TCP
+          name: web-ui
         resources:
           limits:
             memory: 32Mi
@@ -40,11 +47,12 @@ spec:
   selector:
     app: faktory
   ports:
-    - name: service
+    - name: tcp
       protocol: TCP
       port: 7419
       targetPort: 7419
-    - name: web-ui
+    - name: http-web-ui
       protocol: TCP
+      appProtocol: http
       port: 7420
       targetPort: 7420

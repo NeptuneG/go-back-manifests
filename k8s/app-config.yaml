@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: app
+data:
+  TZ: "Asia/Tokyo"
+  REDIS_CACHE_SERVICE_HOST: redis-cache.redis.svc.cluster.local
+  REDIS_CACHE_SERVICE_PORT: "6379"
+  REDIS_MQ_SERVICE_HOST: redis-mq.redis.svc.cluster.local
+  REDIS_MQ_SERVICE_PORT: "6379"
+  DB_HOST: db.db.svc.cluster.local
+  FAKTORY_PROVIDER: "FAKTORY_URL"
+  FAKTORY_URL: "tcp://faktory.app.svc.cluster.local:7419"

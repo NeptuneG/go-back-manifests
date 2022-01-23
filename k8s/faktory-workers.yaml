@@ -1,38 +1,31 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: app
-
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: faktory-workers
   labels:
     app: faktory-workers
+    version: v1
   namespace: app
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: faktory-workers
+      version: v1
   template:
     metadata:
       labels:
         app: faktory-workers
+        version: v1
     spec:
       imagePullSecrets:
       - name: regcred
       containers:
       - name: faktory-workers
         image: docker.io/neptuneg/faktory-workers:latest
-        env:
-        - name: TZ
-          value: "Asia/Tokyo"
-        - name: FAKTORY_PROVIDER
-          value: "FAKTORY_URL"
-        - name: FAKTORY_URL
-          value: "http://faktory.app.svc.cluster.local:7419"
+        envFrom:
+        - configMapRef:
+            name: app-config
         resources:
           limits:
             memory: 128Mi

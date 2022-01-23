@@ -1,5 +1,14 @@
 # go-back-manifests
 
-## postgresql
+## Setup Istio
 
-- [charts/bitnami/postgresql at master · bitnami/charts](https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml)
+```bash
+brew install istioctl
+istioctl install -y
+
+# enable istio-injection
+# restrat the pod
+
+# enable addons(kiali, jaeger, prometheus, grafana)
+kubectl apply -f k8s/istio-system/addons
+```

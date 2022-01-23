@@ -4,27 +4,36 @@ metadata:
   name: scraper
   labels:
     app: scraper
+    version: v1
   namespace: app
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: scraper
+      version: v1
   template:
     metadata:
       labels:
         app: scraper
+        version: v1
     spec:
       containers:
       - name: scraper
         image: docker.io/neptuneg/scraper-service:latest
-        env:
-        - name: FAKTORY_PROVIDER
-          value: "FAKTORY_URL"
-        - name: FAKTORY_URL
-          value: "http://faktory.app.svc.cluster.local:7419"
+        envFrom:
+        - configMapRef:
+            name: app-config
         ports:
         - containerPort: 3377
+          protocol: TCP
+          name: grpc
+        readinessProbe:
+          exec:
+            command: [ "/app/grpc-health-probe", "-addr=:3377" ]
+        livenessProbe:
+          exec:
+            command: [ "/app/grpc-health-probe", "-addr=:3377" ]
         resources:
           limits:
             memory: 32Mi
@@ -45,5 +54,7 @@ spec:
     app: scraper
   ports:
     - protocol: TCP
+      appProtocol: grpc
+      name: grpc
       port: 3377
       targetPort: 3377

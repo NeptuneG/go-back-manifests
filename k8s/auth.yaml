@@ -4,23 +4,27 @@ metadata:
   name: auth
   labels:
     app: auth
+    version: v1
   namespace: app
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: auth
+      version: v1
   template:
     metadata:
       labels:
         app: auth
+        version: v1
     spec:
       containers:
       - name: auth
         image: docker.io/neptuneg/auth-service:latest
+        envFrom:
+        - configMapRef:
+            name: app-config
         env:
-          - name: DB_HOST
-            value: db.db.svc.cluster.local
           - name: DB_NAME
             value: auth_development
           - name: DB_USER
@@ -35,6 +39,14 @@ spec:
                 key: password
         ports:
         - containerPort: 3377
+          protocol: TCP
+          name: grpc
+        readinessProbe:
+          exec:
+            command: [ "/app/grpc-health-probe", "-addr=:3377" ]
+        livenessProbe:
+          exec:
+            command: [ "/app/grpc-health-probe", "-addr=:3377" ]
         resources:
           limits:
             memory: 32Mi
@@ -55,5 +67,7 @@ spec:
     app: auth
   ports:
     - protocol: TCP
+      appProtocol: grpc
+      name: grpc
       port: 3377
       targetPort: 3377

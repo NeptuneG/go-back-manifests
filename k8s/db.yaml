@@ -21,6 +21,8 @@ spec:
         image: postgres:14.1-alpine3.14
         ports:
         - containerPort: 5432
+          protocol: TCP
+          name: tcp
         env:
         - name: TZ
           value: "Asia/Tokyo"
@@ -98,3 +100,5 @@ spec:
     - protocol: TCP
       port: 5432
       targetPort: 5432
+      appProtocol: postgresql
+      name: tcp
