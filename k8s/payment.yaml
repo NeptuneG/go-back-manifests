@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: payment
-        image: docker.io/neptuneg/payment-service:latest
+        image: quay.io/goss_beta/payment-service:latest
         envFrom:
         - configMapRef:
             name: app-config

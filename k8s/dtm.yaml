@@ -1,39 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scraper
+  name: dtm
   labels:
-    app: scraper
+    app: dtm
     version: v1
   namespace: app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: scraper
+      app: dtm
       version: v1
   template:
     metadata:
       labels:
-        app: scraper
+        app: dtm
         version: v1
     spec:
       containers:
-      - name: scraper
-        image: quay.io/goss_beta/scraper-service:latest
+      - name: dtm
+        image: quay.io/goss_beta/dtm:latest
         envFrom:
         - configMapRef:
             name: app-config
         ports:
-        - containerPort: 3377
+        - containerPort: 36790
           protocol: TCP
           name: grpc
-        readinessProbe:
-          exec:
-            command: [ "/app/grpc-health-probe", "-addr=:3377" ]
-        livenessProbe:
-          exec:
-            command: [ "/app/grpc-health-probe", "-addr=:3377" ]
         resources:
           limits:
             memory: 32Mi
@@ -46,15 +40,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: scraper
+  name: dtm
   namespace: app
 spec:
   type: ClusterIP
   selector:
-    app: scraper
+    app: dtm
   ports:
     - protocol: TCP
       appProtocol: grpc
       name: grpc
-      port: 3377
-      targetPort: 3377
+      port: 36790
+      targetPort: 36790

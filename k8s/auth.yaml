@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: auth
-        image: docker.io/neptuneg/auth-service:latest
+        image: quay.io/goss_beta/auth-service:latest
         envFrom:
         - configMapRef:
             name: app-config
