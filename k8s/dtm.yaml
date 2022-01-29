@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dtm
+  labels:
+    app: dtm
+    version: v1
+  namespace: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dtm
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: dtm
+        version: v1
+    spec:
+      containers:
+      - name: dtm
+        image: quay.io/goss_beta/dtm:latest
+        envFrom:
+        - configMapRef:
+            name: app-config
+        ports:
+        - containerPort: 36790
+          protocol: TCP
+          name: grpc
+        resources:
+          limits:
+            memory: 32Mi
+            cpu: "0.3"
+          requests:
+            memory: 16Mi
+            cpu: "0.1"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dtm
+  namespace: app
+spec:
+  type: ClusterIP
+  selector:
+    app: dtm
+  ports:
+    - protocol: TCP
+      appProtocol: grpc
+      name: grpc
+      port: 36790
+      targetPort: 36790

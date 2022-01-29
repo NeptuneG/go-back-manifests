@@ -12,3 +12,5 @@ data:
   DB_HOST: db.db.svc.cluster.local
   FAKTORY_PROVIDER: "FAKTORY_URL"
   FAKTORY_URL: "tcp://faktory.app.svc.cluster.local:7419"
+  DTM_HOST: dtm.app.svc.cluster.local
+  DTM_GRPC_PORT: "36790"
