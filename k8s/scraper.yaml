@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: scraper
-        image: docker.io/neptuneg/scraper-service:latest
+        image: quay.io/goss_beta/scraper-service:latest
         envFrom:
         - configMapRef:
             name: app-config
