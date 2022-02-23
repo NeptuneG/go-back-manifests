@@ -1,5 +1,21 @@
 # go-back-manifests
 
+## Installation Prerequisites
+
+1. Create a new namespace with the label `istio-injection: enabled`
+2. Install istio and addons
+
+
+```bash
+brew install istioctl
+istioctl install -y
+
+# To enable istio addons(kiali, jaeger, prometheus, grafana)
+# istio-system/addons: https://github.com/NeptuneG/go-back-manifests/tree/fa979239c50b49d61eea2ee01a538c2b4a2ceed6/k8s/istio-system/addons
+kubectl apply -f istio-system/addons
+```
+
+<!--
 ## Connect to GKE
 
 ```bash
@@ -57,3 +73,4 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 # Debug-Dryrun
 helm install --debug --dry-run --generate-name .
 ```
+-->
