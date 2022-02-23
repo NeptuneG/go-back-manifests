@@ -22,7 +22,8 @@ spec:
       - name: regcred
       containers:
       - name: faktory-workers
-        image: quay.io/goss_beta/faktory-workers:latest
+        image: "{{ .Values.faktory-workers.image.repository }}:{{ .Values.faktory-workers.image.tag }}"
+        imagePullPolicy: {{ .Values.faktory-workers.image.pullPolicy }}
         envFrom:
         - configMapRef:
             name: app-config

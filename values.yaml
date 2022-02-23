@@ -1,0 +1,39 @@
+# Default values for go-back.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+auth:
+  image:
+    repository: quay.io/goss_beta/auth-service
+    pullPolicy: IfNotPresent
+    tag: ff7d722a1755ab39f26f4c46739d076a160425ff
+gateway:
+  image:
+    repository: quay.io/goss_beta/gateway-service
+    pullPolicy: IfNotPresent
+    tag: ff7d722a1755ab39f26f4c46739d076a160425ff
+scraper:
+  image:
+    repository: quay.io/goss_beta/scraper-service
+    pullPolicy: IfNotPresent
+    tag: ff7d722a1755ab39f26f4c46739d076a160425ff
+live:
+  image:
+    repository: quay.io/goss_beta/live-service
+    pullPolicy: IfNotPresent
+    tag: 48c693842dfa7dc55fdc5ac3413dd02fd6216c1f
+payment:
+  image:
+    repository: quay.io/goss_beta/payment-service
+    pullPolicy: IfNotPresent
+    tag: ff7d722a1755ab39f26f4c46739d076a160425ff
+faktory-workers:
+  image:
+    repository: quay.io/goss_beta/faktory-workers
+    pullPolicy: IfNotPresent
+    tag: ff7d722a1755ab39f26f4c46739d076a160425ff
+dtm:
+  image:
+    repository: quay.io/goss_beta/dtm
+    pullPolicy: IfNotPresent
+    tag: latest
