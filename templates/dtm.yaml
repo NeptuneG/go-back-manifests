@@ -20,7 +20,8 @@ spec:
     spec:
       containers:
       - name: dtm
-        image: quay.io/goss_beta/dtm:latest
+        image: "{{ .Values.dtm.image.repository }}:{{ .Values.dtm.image.tag }}"
+        imagePullPolicy: {{ .Values.dtm.image.pullPolicy }}
         envFrom:
         - configMapRef:
             name: app-config

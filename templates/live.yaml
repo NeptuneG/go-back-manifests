@@ -1,29 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scraper
+  name: live
   labels:
-    app: scraper
+    app: live
     version: v1
   namespace: app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: scraper
+      app: live
       version: v1
   template:
     metadata:
       labels:
-        app: scraper
+        app: live
         version: v1
     spec:
       containers:
-      - name: scraper
-        image: quay.io/goss_beta/scraper-service:latest
+      - name: live
+        image: "{{ .Values.live.image.repository }}:{{ .Values.live.image.tag }}"
+        imagePullPolicy: {{ .Values.live.image.pullPolicy }}
         envFrom:
         - configMapRef:
             name: app-config
+        env:
+          - name: DB_NAME
+            value: live_development
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: psql
+                key: username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: psql
+                key: password
         ports:
         - containerPort: 3377
           protocol: TCP
@@ -46,12 +60,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: scraper
+  name: live
   namespace: app
 spec:
   type: ClusterIP
   selector:
-    app: scraper
+    app: live
   ports:
     - protocol: TCP
       appProtocol: grpc

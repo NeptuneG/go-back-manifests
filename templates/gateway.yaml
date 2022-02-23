@@ -1,43 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth
+  name: gateway
   labels:
-    app: auth
+    app: gateway
     version: v1
   namespace: app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: gateway
       version: v1
   template:
     metadata:
       labels:
-        app: auth
+        app: gateway
         version: v1
     spec:
       containers:
-      - name: auth
-        image: quay.io/goss_beta/auth-service:latest
-        envFrom:
-        - configMapRef:
-            name: app-config
-        env:
-          - name: DB_NAME
-            value: auth_development
-          - name: DB_USER
-            valueFrom:
-              secretKeyRef:
-                name: psql
-                key: username
-          - name: DB_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: psql
-                key: password
+      - name: gateway
+        image: "{{ .Values.gateway.image.repository }}:{{ .Values.gateway.image.tag }}"
+        imagePullPolicy: {{ .Values.gateway.image.pullPolicy }}
         ports:
+        - containerPort: 4000
+          protocol: TCP
+          name: http
         - containerPort: 3377
           protocol: TCP
           name: grpc
@@ -59,13 +47,18 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth
+  name: gateway
   namespace: app
 spec:
   type: ClusterIP
   selector:
-    app: auth
+    app: gateway
   ports:
+    - protocol: TCP
+      appProtocol: http
+      name: http
+      port: 4000
+      targetPort: 4000
     - protocol: TCP
       appProtocol: grpc
       name: grpc

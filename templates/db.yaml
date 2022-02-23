@@ -79,7 +79,7 @@ metadata:
   name: db-data
   namespace: db
 spec:
-  storageClassName: hostpath
+  storageClassName: gce-pd
   resources:
     requests:
       storage: 1Gi

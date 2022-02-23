@@ -20,7 +20,8 @@ spec:
     spec:
       containers:
       - name: payment
-        image: quay.io/goss_beta/payment-service:latest
+        image: "{{ .Values.payment.image.repository }}:{{ .Values.payment.image.tag }}"
+        imagePullPolicy: {{ .Values.payment.image.pullPolicy }}
         envFrom:
         - configMapRef:
             name: app-config
