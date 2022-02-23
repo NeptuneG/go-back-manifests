@@ -55,5 +55,5 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 
 ```bash
 # Debug-Dryrun
-helm install --debug --dry-run --name $NAME ./chart
+helm install --debug --dry-run --generate-name .
 ```
