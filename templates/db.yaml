@@ -4,7 +4,7 @@ metadata:
   name: db
   labels:
     app: db
-  namespace: db
+    {{- include "go-back.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
@@ -14,7 +14,6 @@ spec:
     metadata:
       labels:
         app: db
-      namespace: db
     spec:
       containers:
       - name: db
@@ -66,7 +65,6 @@ metadata:
   name: initdb
   labels:
     app: db
-  namespace: db
 data:
   initdb.sh: |
     psql -U $POSTGRES_USER -tc "SELECT 1 FROM pg_database WHERE datname = 'live_development'" | grep -q 1 || psql -U $POSTGRES_USER -c "CREATE DATABASE live_development"
@@ -77,7 +75,6 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: db-data
-  namespace: db
 spec:
   storageClassName: gce-pd
   resources:
@@ -91,7 +88,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: db
-  namespace: db
+  labels:
+    {{- include "go-back.labels" . | nindent 4 }}
 spec:
   type: ClusterIP
   selector:

@@ -2,7 +2,6 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: gateway
-  namespace: app
 spec:
   selector:
     istio: ingressgateway
@@ -18,7 +17,6 @@ apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: gateway-virtual-service
-  namespace: app
 spec:
   gateways:
     - gateway
@@ -38,7 +36,6 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: gateway-circuit-breaker
-  namespace: app
 spec:
   host: gateway.app.svc.cluster.local
   trafficPolicy:
@@ -48,7 +45,6 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: auth-circuit-breaker
-  namespace: app
 spec:
   host: auth.app.svc.cluster.local
   trafficPolicy:
@@ -58,7 +54,6 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: live-circuit-breaker
-  namespace: app
 spec:
   host: live.app.svc.cluster.local
   trafficPolicy:
@@ -68,7 +63,6 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: payment-circuit-breaker
-  namespace: app
 spec:
   host: payment.app.svc.cluster.local
   trafficPolicy:
@@ -78,7 +72,6 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: scraper-circuit-breaker
-  namespace: app
 spec:
   host: scraper.app.svc.cluster.local
   trafficPolicy:
