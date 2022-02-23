@@ -5,7 +5,7 @@ metadata:
   labels:
     app: faktory-workers
     version: v1
-  namespace: app
+    {{- include "go-back.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
@@ -22,8 +22,8 @@ spec:
       - name: regcred
       containers:
       - name: faktory-workers
-        image: "{{ .Values.faktory-workers.image.repository }}:{{ .Values.faktory-workers.image.tag }}"
-        imagePullPolicy: {{ .Values.faktory-workers.image.pullPolicy }}
+        image: "{{ .Values.faktory_workers.image.repository }}:{{ .Values.faktory_workers.image.tag }}"
+        imagePullPolicy: {{ .Values.faktory_workers.image.pullPolicy }}
         envFrom:
         - configMapRef:
             name: app-config

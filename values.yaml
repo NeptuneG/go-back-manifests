@@ -27,7 +27,7 @@ payment:
     repository: quay.io/goss_beta/payment-service
     pullPolicy: IfNotPresent
     tag: ff7d722a1755ab39f26f4c46739d076a160425ff
-faktory-workers:
+faktory_workers:
   image:
     repository: quay.io/goss_beta/faktory-workers
     pullPolicy: IfNotPresent
