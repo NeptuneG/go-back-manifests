@@ -1,6 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: gateway
 spec:
   selector:
@@ -16,6 +17,7 @@ spec:
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: gateway-virtual-service
 spec:
   gateways:
@@ -35,6 +37,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: gateway-circuit-breaker
 spec:
   host: gateway.app.svc.cluster.local
@@ -44,6 +47,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: auth-circuit-breaker
 spec:
   host: auth.app.svc.cluster.local
@@ -53,6 +57,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: live-circuit-breaker
 spec:
   host: live.app.svc.cluster.local
@@ -62,6 +67,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: payment-circuit-breaker
 spec:
   host: payment.app.svc.cluster.local
@@ -71,6 +77,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: scraper-circuit-breaker
 spec:
   host: scraper.app.svc.cluster.local

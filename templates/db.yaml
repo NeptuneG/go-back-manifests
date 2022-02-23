@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: db
   labels:
     app: db
@@ -12,6 +13,7 @@ spec:
       app: db
   template:
     metadata:
+      namespace: {{ .Release.Namespace }}
       labels:
         app: db
     spec:
@@ -62,6 +64,7 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: initdb
   labels:
     app: db
@@ -74,6 +77,7 @@ data:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: db-data
 spec:
   storageClassName: gce-pd
@@ -87,6 +91,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: db
   labels:
     {{- include "go-back.labels" . | nindent 4 }}
