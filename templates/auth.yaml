@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: auth
   labels:
     app: auth
@@ -60,6 +61,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: auth
   labels:
     {{- include "go-back.labels" . | nindent 4 }}
